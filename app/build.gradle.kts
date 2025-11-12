@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
@@ -60,6 +61,8 @@ dependencies {
     // Compose helpers
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation(libs.androidx.datastore.preferences)
 
     //Firebase
     implementation(platform(libs.firebase.bom))
