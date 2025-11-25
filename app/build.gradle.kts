@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.coil.compose)
 
     //Firebase
     implementation(platform(libs.firebase.bom))
@@ -89,6 +90,7 @@ dependencies {
     // Hilt (with KSP)
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Tests
     testImplementation(libs.junit)
