@@ -41,7 +41,6 @@ fun AppNavHost(
     val onboardingDone = onboardingPref ?: false
 
     val startDest = if (onboardingDone) HomeRoute else OnboardingRoute
-    val viewState by viewModel.viewState.collectAsState()
 
     NavHost(
         navController = navController,
@@ -77,6 +76,7 @@ fun AppNavHost(
         }
 
         composable<PreviewRoute> {
+            val viewState by viewModel.viewState.collectAsState()
             LaunchedEffect(viewState.nutritionResult) {
                 viewState.nutritionResult?.let {
                     navController.navigate(DetailRoute) {
@@ -86,20 +86,19 @@ fun AppNavHost(
             }
 
             PreviewScreen(
-                viewState = viewState,
+                viewModel = viewModel,
                 onGetNutrition = { bitmap ->
                     viewModel.generateNutrition(bitmap)
                 },
                 onClose = {
                     viewModel.clearNutritionResult()
                     navController.popBackStack()
-                },
-                onChangePhoto = {},
-                onRemovePhoto = {}
+                }
             )
         }
 
         composable<DetailRoute> {
+            val viewState by viewModel.viewState.collectAsState()
             DisposableEffect(Unit) {
                 onDispose {
                     viewModel.clearNutritionResult()
