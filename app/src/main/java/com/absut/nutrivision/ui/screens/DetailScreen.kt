@@ -100,33 +100,31 @@ fun DetailScreen(
                     }*/
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
                 )
             )
         }
     ) { paddingValues ->
         Column(
             modifier = modifier
+                .background(MaterialTheme.colorScheme.surfaceContainer)
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-            ) {
                 AsyncImage(
                     model = imagePath,
                     contentDescription = nutritionResult?.name ?: "Food image",
                     contentScale = ContentScale.Crop,
                     placeholder = painterResource(id = R.drawable.placeholder_food),
                     error = painterResource(id = R.drawable.placeholder_food),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                        .padding(top = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
                 )
-            }
+
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -191,7 +189,7 @@ fun DetailScreen(
 
             NutritionInfoList(items = displayInfo)
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(36.dp))
             Text(
                 text = "This information is AI generated and should be used for informational purposes only. Consult a professional for specific dietary advice.",
                 style = MaterialTheme.typography.bodySmall,
@@ -228,14 +226,14 @@ fun DetailScreen(
 fun Chip(text: String, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.tertiaryContainer
     ) {
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onTertiaryContainer
         )
     }
 }
@@ -244,14 +242,14 @@ fun Chip(text: String, modifier: Modifier = Modifier) {
 fun CaloriesCard(modifier: Modifier = Modifier, calories: Int) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        //elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(vertical = 16.dp, horizontal = 32.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -259,7 +257,7 @@ fun CaloriesCard(modifier: Modifier = Modifier, calories: Int) {
                 Text(
                     text = "Total Calories",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(Modifier.size(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -273,7 +271,7 @@ fun CaloriesCard(modifier: Modifier = Modifier, calories: Int) {
                     Text(
                         text = "kcal",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.alignByBaseline()
                     )
                 }
@@ -305,9 +303,9 @@ fun NutrientCard(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        //elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -330,7 +328,7 @@ fun NutrientCard(
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = name, style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+                Text(text = name, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
@@ -340,9 +338,9 @@ fun NutrientCard(
 fun NutritionInfoList(modifier: Modifier = Modifier, items: List<InfoItem>) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        //elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             items.forEachIndexed { index, item ->
@@ -357,7 +355,7 @@ fun NutritionInfoList(modifier: Modifier = Modifier, items: List<InfoItem>) {
                     Text(
                         text = item.value,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 if (index < items.lastIndex) {

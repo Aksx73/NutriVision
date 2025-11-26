@@ -14,7 +14,7 @@ data class InfoItem(
 @Serializable
 @Parcelize
 data class NutritionResult(
-    val imagePath : String?,
+    val imagePath : String? = null,
     val name: String,
     val calories: Int,
     val type: String,
