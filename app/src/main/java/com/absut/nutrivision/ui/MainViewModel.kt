@@ -45,64 +45,101 @@ class MainViewModel @Inject constructor(
     }
 
     fun generateNutrition(image: Bitmap?) {
-
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
-                Log.e("MainViewModel", throwable.message ?: "Unknown error")
-                _viewState.value = _viewState.value.copy(loading = false, error = throwable.message)
+                Log.e("MainViewModel", "Error: ${throwable.message}", throwable)
+                _viewState.value = _viewState.value.copy(
+                    loading = false,
+                    error = throwable.message ?: "Unknown error occurred"
+                )
             }
         ) {
-            if (image != null) {
-                _viewState.value = _viewState.value.copy(
-                    loading = true,
-                    error = null
-                )
+            if (image == null) {
+                _viewState.value = _viewState.value.copy(error = "No image to analyze")
+                return@launch
+            }
 
-                /////////////////
+            _viewState.value = _viewState.value.copy(loading = true, error = null)
+
+            try {
                 delay(2000)
-                val dummyResult = NutritionResult(
-                    name = "Hawaiian Pizza",
-                    calories = 520,
-                    type = "Fast Food",
-                    servingSize = "1 slice (150g)",
-                    protein = 25,
-                    carbs = 45,
-                    fat = 22,
-                    fiber = 5,
-                    imagePath = _viewState.value.imagePath,
-                    info = listOf(
-                        InfoItem("Sodium", "1100mg"),
-                        InfoItem("Total Sugars", "12g"),
-                        InfoItem("Saturated Fat", "10g"),
-                        InfoItem("Potassium", "300mg"),
-                        InfoItem("Vitamin C", "15mg"),
-                        InfoItem("Cholesterol", "60mg")
-                    )
-                )
+                //val nutritionResultString = aiRepository.generateIngredients(image)
+                val nutritionResultString = "{\n" +
+                        "  \"name\": \"Greek Salad with Feta\",\n" +
+                        "  \"calories\": 320,\n" +
+                        "  \"type\": \"salad\",\n" +
+                        "  \"servingSize\": \"1 Bowl (350g)\",\n" +
+                        "  \"protein\": 8,\n" +
+                        "  \"carbs\": 12,\n" +
+                        "  \"fat\": 26,\n" +
+                        "  \"fiber\": 4,\n" +
+                        "  \"info\": [\n" +
+                        "    {\n" +
+                        "      \"label\": \"Sodium\",\n" +
+                        "      \"value\": \"680 mg\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"label\": \"Sugars\",\n" +
+                        "      \"value\": \"7 g\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"label\": \"Saturated Fat\",\n" +
+                        "      \"value\": \"6 g\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"label\": \"Calcium\",\n" +
+                        "      \"value\": \"18% DV\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"label\": \"Vitamin A\",\n" +
+                        "      \"value\": \"25% DV\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"label\": \"Vitamin C\",\n" +
+                        "      \"value\": \"30% DV\"\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"
 
-                _viewState.value = _viewState.value.copy(
-                    loading = false,
-                    nutritionResult = dummyResult
-                )
-                /////////////////////
-
-                /*val nutritionResultString = aiRepository.generateIngredients(image)
-                val nutritionResult: NutritionResult = json.decodeFromString<NutritionResult>(nutritionResultString)
-
-                _viewState.value = _viewState.value.copy(
-                    loading = false,
-                    nutritionResult = nutritionResult.copy(imagePath = _viewState.value.imagePath)
-                )*/
-
-                if (dummyResult.imagePath != null) {
-                    saveNutritionRecord(dummyResult)
-                } else {
-                    Log.e("MainViewModel", "Image path is null, cannot save record.")
+                // Parse JSON with error handling
+                val nutritionResult: NutritionResult = try {
+                    json.decodeFromString<NutritionResult>(nutritionResultString)
+                } catch (e: Exception) {
+                    throw Exception("Failed to parse nutrition data: ${e.message}")
                 }
 
+                if (nutritionResult.type == "error") {
+                    throw Exception("This image does not look like food.")
+                }
+
+                // Validate image path
+                if (_viewState.value.imagePath == null) {
+                    throw Exception("Image path is missing")
+                }
+
+                val resultWithPath = nutritionResult.copy(imagePath = _viewState.value.imagePath)
+
+                _viewState.value = _viewState.value.copy(
+                    loading = false,
+                    nutritionResult = resultWithPath
+                )
+
+                //saveNutritionRecord(resultWithPath)
+
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Failed to generate nutrition", e)
+                _viewState.value = _viewState.value.copy(
+                    loading = false,
+                    error = when {
+                        e.message?.contains("Unable to resolve host") == true -> "No internet connection"
+                        e.message?.contains("timeout") == true -> "Request timed out"
+                        e.message?.contains("parse") == true -> e.message
+                        e.message?.contains("food") == true -> e.message
+                        else -> "Failed to analyze image: ${e.message}"
+                    }
+                )
             }
         }
-
     }
 
     fun saveNutritionRecord(result: NutritionResult) {
@@ -130,6 +167,10 @@ class MainViewModel @Inject constructor(
                 setSelectedRecord(null)
             }
         }
+    }
+
+    fun clearError() {
+        _viewState.value = _viewState.value.copy(error = null)
     }
 
     /*fun getRecordById(id: Int): Flow<NutritionRecord> {
