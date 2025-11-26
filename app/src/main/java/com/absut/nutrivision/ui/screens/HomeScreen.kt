@@ -23,8 +23,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.CameraEnhance
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,8 +37,10 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,7 +50,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -63,6 +67,7 @@ import com.absut.nutrivision.ui.component.EmptyState
 import com.absut.nutrivision.ui.theme.NutriVisionTheme
 import io.ktor.util.sha1
 import java.io.File
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,14 +103,18 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(text = stringResource(id = R.string.app_name)) }
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                ),
             )
         }
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .padding(innerPadding),
         ) {
             if (savedRecords.isEmpty()) {
                 EmptyState(
@@ -158,6 +167,7 @@ fun NutritionRecordItem(
         modifier = modifier
             .fillMaxWidth(),
         onClick = onClick,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(16.dp),
     ) {
         Column() {
@@ -173,59 +183,76 @@ fun NutritionRecordItem(
             )
         }
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row {
-                Icon(
-                    painter = painterResource(R.drawable.ic_fire_24),
-                    modifier = Modifier.size(18.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = null
-                )
+        Box() {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_fire_24),
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = null
+                    )
+                    Text(
+                        text = "${record.calories} kcal",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                Spacer(Modifier.size(4.dp))
                 Text(
-                    text = "${record.calories} kcal",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    text = record.name,
+                    style = MaterialTheme.typography.titleMedium,
                 )
+                Spacer(Modifier.size(2.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Protein: ${record.protein}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "Carbs: ${record.protein}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "Fat: ${record.protein}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "Fiber: ${record.fiber}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
-            Spacer(Modifier.size(4.dp))
-            Text(
-                text = record.name,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Spacer(Modifier.size(2.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            Box(
+                Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 16.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .size(32.dp)
             ) {
-                Text(
-                    text = "Protein: ${record.protein}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "Carbs: ${record.protein}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "Fat: ${record.protein}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "Fiber: ${record.fiber}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                    contentDescription = null,
+                    modifier = Modifier.padding(8.dp),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
     }
 }
 
-private fun createImageBitmap(context: Context, tempFileUrl: Uri?): Bitmap? {
-    return tempFileUrl?.let {
+fun createImageBitmap(context: Context, tempFileUri: Uri?): Bitmap? {
+    return tempFileUri?.let {
         val imageInputStream = context.contentResolver.openInputStream(it)
         val bitmap = BitmapFactory.decodeStream(imageInputStream)
         imageInputStream?.close()
@@ -233,7 +260,7 @@ private fun createImageBitmap(context: Context, tempFileUrl: Uri?): Bitmap? {
     }
 }
 
-private fun createTempFileUrl(context: Context): Uri? {
+fun createTempFileUrl(context: Context): Uri? {
     val tempFile = File.createTempFile(
         "temp_image_file_",
         ".jpg",
