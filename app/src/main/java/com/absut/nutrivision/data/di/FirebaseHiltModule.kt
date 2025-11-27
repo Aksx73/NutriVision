@@ -17,13 +17,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
+/** Available Generative Models from GEMINI
+ * "gemini-2.5-pro" | "gemini-2.5-flash" | "gemini-2.5-flash-lite" | "gemini-3-pro-preview" | "gemini-2.0-flash" | "gemini-2.0-flash-lite"
+ * */
 @Module
 @InstallIn(SingletonComponent::class)
 object FirebaseHiltModule {
 
     @Provides fun generativeModel(): GenerativeModel {
         return Firebase.ai(backend = GenerativeBackend.googleAI())
-            .generativeModel("gemini-2.0-flash")
+            .generativeModel("gemini-2.5-flash")
     }
 
 }

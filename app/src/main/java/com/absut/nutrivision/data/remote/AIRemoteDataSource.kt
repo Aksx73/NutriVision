@@ -13,25 +13,26 @@ class AIRemoteDataSource @Inject constructor(
     suspend fun generateNutrition(image: Bitmap): String {
         val prompt = content {
             image(image)
-            text("Please analyze this image and list all visible food ingredients. " +
-                    "Format the response as a comma-separated list of ingredients. " +
-                    "Be specific with measurements where possible, " +
-                    "but focus on identifying the ingredients accurately.")
+            text(PROMPT)
         }
 
         val response = generativeModel.generateContent(prompt)
         return response.text.orEmpty()
     }
 
-    companion object{
-        const val PROMPT = "Analyze attached image. Return JSON ONLY.\n" +
-                "Schema: { \"name\": str, \"calories\": int, \"type\": \"fruit\"|\"veg\"|\"dish\"|\"salad\"|\"error\", \"servingSize\": \"Qty (Weight)\", \"protein\": int, \"carbs\": int, \"fat\": int, \"fiber\": int, \"info\": [{ \"label\": \"str\", \"value\": \"str\" }] }\n" +
-                "Rules:\n" +
-                "1. If image is NOT food, set type=\"error\", name=\"Not Food\", numeric values=0, info=[].\n" +
-                "2. If food, extract nutrition for full serving.\n" +
-                "3. \"info\" includes micros (sodium, sugar, sat fat, etc).\n" +
-                "4. \"value\" is ONLY Num+Unit (e.g. \"9 g\").\n" +
-                "5. \"servingSize\" is concise."
+    companion object {
+
+        val PROMPT = """
+    Analyze attached image. Return raw JSON ONLY. No markdown or backticks.
+    Schema: { "name": str, "calories": int, "type": "fruit"|"veg"|"dish"|"salad"|"error", "servingSize": "Qty (Weight)", "protein": int, "carbs": int, "fat": int, "fiber": int, "info": [{ "label": "str", "value": "str" }] }
+    Rules:
+    1. If image is NOT food: set type="error", name="Not Food", all numbers=0, info=[].
+    2. If food: extract nutrition for full serving shown.
+    3. "info" array must include: Sodium, Sugar, Saturated Fat, Potassium, Cholesterol, Vitamins.
+    4. "value" format is STRICTLY Number+Unit (e.g. "9 g", "250 mg"). No extra text.
+    5. "servingSize" is concise (e.g. "1 Plate (740g)").
+""".trimIndent()
+
     }
 
 }
