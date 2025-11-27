@@ -63,8 +63,9 @@ class MainViewModel @Inject constructor(
 
             try {
                 delay(2000)
-                //val nutritionResultString = aiRepository.generateIngredients(image)
-                val nutritionResultString = "{\n" +
+                var nutritionResultString = aiRepository.generateIngredients(image)
+
+                /*val nutritionResultString = "{\n" +
                         "  \"name\": \"Greek Salad with Feta\",\n" +
                         "  \"calories\": 320,\n" +
                         "  \"type\": \"salad\",\n" +
@@ -99,7 +100,21 @@ class MainViewModel @Inject constructor(
                         "      \"value\": \"30% DV\"\n" +
                         "    }\n" +
                         "  ]\n" +
-                        "}"
+                        "}"*/
+
+                // Remove markdown code block syntax if present
+                if (nutritionResultString.contains("```")) {
+                    nutritionResultString = nutritionResultString.replace("```json", "").replace("```", "")
+                }
+
+                // 2. Find the exact start and end of the JSON object (Safety Net)
+                val startIndex = nutritionResultString.indexOf('{')
+                val endIndex = nutritionResultString.lastIndexOf('}')
+
+                if (startIndex != -1 && endIndex != -1) {
+                    // Extract only the valid JSON part
+                    nutritionResultString = nutritionResultString.substring(startIndex, endIndex + 1)
+                }
 
                 // Parse JSON with error handling
                 val nutritionResult: NutritionResult = try {
@@ -124,7 +139,7 @@ class MainViewModel @Inject constructor(
                     nutritionResult = resultWithPath
                 )
 
-                //saveNutritionRecord(resultWithPath)
+                saveNutritionRecord(resultWithPath)
 
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Failed to generate nutrition", e)

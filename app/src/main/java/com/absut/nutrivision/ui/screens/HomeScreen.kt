@@ -211,22 +211,22 @@ fun NutritionRecordItem(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = "Protein: ${record.protein}",
+                        text = "Protein: ${record.protein}g",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "Carbs: ${record.protein}",
+                        text = "Carbs: ${record.protein}g",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "Fat: ${record.protein}",
+                        text = "Fat: ${record.protein}g",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "Fiber: ${record.fiber}",
+                        text = "Fiber: ${record.fiber}g",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
