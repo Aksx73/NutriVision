@@ -12,14 +12,14 @@ The analyzed results are displayed and stored locally using **Room Database** fo
 <table>
 <thead>
 <tr>
-<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093222_NutriVision.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093222_NutriVision.png?raw=true" alt="sound meter" style="max-width: 100%;"></a></th>
-<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093719.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093719.png?raw=true" alt="sound meter" style="max-width: 100%;"></a></th>
+<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-095041.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-095041.png?raw=true" alt="Home screen" style="max-width: 100%;"></a></th>
+<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093719.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093719.png?raw=true" alt="Preview screen" style="max-width: 100%;"></a></th>
 </tr>
 </thead>
 <thead>
 <tr>
-<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093729.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093729.png?raw=true" alt="sound meter" style="max-width: 100%;"></a></th>
-<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093731.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093731.png?raw=true" alt="sound meter" style="max-width: 100%;"></a></th>
+<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093729.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093729.png?raw=true" alt="Result screen" style="max-width: 100%;"></a></th>
+<th><a target="_blank" rel="noopener noreferrer" href="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093731.png"><img src="https://github.com/Aksx73/NutriVision/blob/master/screenshots/Screenshot_20251130-093731.png?raw=true" alt="Result screen" style="max-width: 100%;"></a></th>
 </tr>
 </thead>
 </table>
